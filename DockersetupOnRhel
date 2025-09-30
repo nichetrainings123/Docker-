@@ -1,0 +1,56 @@
+Introduction:
+Docker, a powerful containerization platform, has become an indispensable tool for modern software development and deployment. If you're using CentOS 9, this guide will walk you through the process of installing Docker, ensuring a smooth experience for managing and running containers. We'll also cover the removal of older Docker versions to ensure a clean installation.
+
+Step 1: Prerequisites
+Before diving into the Docker installation process, make sure your CentOS 9 system is up to date:
+
+sudo yum update
+Step 2: Remove Older Docker Versions
+If you have any older versions of Docker installed, it's essential to remove them along with their associated dependencies. Use the following command to uninstall older Docker packages:
+
+sudo yum remove docker \
+ docker-client \
+ docker-client-latest \
+ docker-common \
+ docker-latest \
+ docker-latest-logrotate \
+ docker-logrotate \
+ docker-engine
+Step 3: Install Required Dependencies
+To prepare your system for Docker installation, install the necessary dependencies:
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+Step 4: Add Docker Repository
+Next, you need to add the official Docker repository to your CentOS system:
+
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+Step 5: Install Docker
+With the repository added, you're now ready to install Docker:
+
+sudo yum install docker-ce
+Step 6: Start and Enable Docker
+After the installation is complete, start the Docker service and enable it to start on boot:
+
+sudo systemctl start docker
+sudo systemctl enable docker
+Step 7: Verify Docker Installation
+Confirm that Docker is installed and running by checking its version:
+
+sudo docker --version
+Step 8: Test Docker with a Hello World Container
+Test your Docker installation by running a "Hello World" container:
+
+sudo docker run hello-world
+Step 9: Managing Docker as a Non-root User (Optional)
+
+To avoid using the sudo command with every Docker command, you can add your user to the "docker" group:
+
+sudo usermod -aG docker <your_username>
+Remember to log out and log back in or restart your system to apply the changes.
+
+Conclusion:
+Congratulations! You've successfully installed Docker on your CentOS 9 system, empowering you to take advantage of containerization for efficient development, deployment, and management of applications. With Docker, you can create isolated environments that streamline your development workflow and enhance application portability. Now you're ready to explore the vast world of containers and leverage Docker's capabilities to enhance your projects.
+
+ 
+
+ 
