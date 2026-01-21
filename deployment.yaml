@@ -1,68 +1,38 @@
-# API version of Kubernetes being used
-# apps/v1 is used for Deployment, StatefulSet, DaemonSet
+# API version for Deployment
 apiVersion: apps/v1
 
-# Type of Kubernetes resource
+# Resource type
 kind: Deployment
 
-# Metadata about the resource
+# Metadata about the deployment
 metadata:
-  name: nginx-deployment        # Name of the deployment
-  namespace: default            # Namespace (default if not specified)
-  labels:                       # Labels help identify & group resources
-    app: nginx
+  name: lab1-deployment           # Deployment name
+  labels:
+    app: lab1
 
-# Specification of the desired state
 spec:
-  replicas: 3                   # Number of pod replicas to run
+  replicas: 2                     # Number of pod replicas
 
-  # Selector tells the Deployment which Pods it manages
+  # Deployment manages pods with this label
   selector:
     matchLabels:
-      app: nginx
+      app: lab1
 
-  # Pod template (blueprint for pods)
+  # Pod template
   template:
     metadata:
       labels:
-        app: nginx              # Must match selector labels
+        app: lab1                 # Must match selector
 
-    # Pod specification
     spec:
       containers:
-        - name: nginx-container   # Name of the container
-          image: nginx:1.25       # Docker image to pull
-          imagePullPolicy: Always # Always pull image on pod start
+        - name: lab1-container    # Container name
+
+          # 🔹 Docker Hub image (UPDATED)
+          image: nichetrainings123/lab1:latest
+
+          # Always pull latest image
+          imagePullPolicy: Always
 
           ports:
-            - containerPort: 80   # Port exposed inside container
-
-          # Environment variables inside container
-          env:
-            - name: ENV
-              value: production
-
-          # Resource limits & requests (important for production)
-          resources:
-            requests:
-              cpu: "100m"         # Minimum CPU guaranteed
-              memory: "128Mi"     # Minimum memory guaranteed
-            limits:
-              cpu: "500m"         # Maximum CPU allowed
-              memory: "256Mi"     # Maximum memory allowed
-
-          # Health check to know if container is alive
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 10
-
-          # Health check to know if container is ready to serve traffic
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            - containerPort: 80   # App port inside container
