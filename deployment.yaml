@@ -1,0 +1,68 @@
+# API version of Kubernetes being used
+# apps/v1 is used for Deployment, StatefulSet, DaemonSet
+apiVersion: apps/v1
+
+# Type of Kubernetes resource
+kind: Deployment
+
+# Metadata about the resource
+metadata:
+  name: nginx-deployment        # Name of the deployment
+  namespace: default            # Namespace (default if not specified)
+  labels:                       # Labels help identify & group resources
+    app: nginx
+
+# Specification of the desired state
+spec:
+  replicas: 3                   # Number of pod replicas to run
+
+  # Selector tells the Deployment which Pods it manages
+  selector:
+    matchLabels:
+      app: nginx
+
+  # Pod template (blueprint for pods)
+  template:
+    metadata:
+      labels:
+        app: nginx              # Must match selector labels
+
+    # Pod specification
+    spec:
+      containers:
+        - name: nginx-container   # Name of the container
+          image: nginx:1.25       # Docker image to pull
+          imagePullPolicy: Always # Always pull image on pod start
+
+          ports:
+            - containerPort: 80   # Port exposed inside container
+
+          # Environment variables inside container
+          env:
+            - name: ENV
+              value: production
+
+          # Resource limits & requests (important for production)
+          resources:
+            requests:
+              cpu: "100m"         # Minimum CPU guaranteed
+              memory: "128Mi"     # Minimum memory guaranteed
+            limits:
+              cpu: "500m"         # Maximum CPU allowed
+              memory: "256Mi"     # Maximum memory allowed
+
+          # Health check to know if container is alive
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          # Health check to know if container is ready to serve traffic
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
